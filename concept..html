@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BookShare — Recommendations & Notes</title>
+  <style>
+    :root{--bg:#f7f7fb;--card:#fff;--accent:#2b6cb0;--muted:#6b7280}
+    *{box-sizing:border-box}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,Helvetica,Arial;background:var(--bg);color:#111}
+    header{padding:28px 20px;max-width:1100px;margin:0 auto}
+    .site-title{display:flex;align-items:center;gap:16px}
+    .logo{width:48px;height:48px;border-radius:8px;background:linear-gradient(135deg,var(--accent),#6ea8ff);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700}
+    h1{font-size:20px;margin:0}
+    p.lead{margin:6px 0 0;color:var(--muted);font-size:14px}
+
+    /* Category nav */
+    .categories{display:flex;gap:8px;padding:16px 0;flex-wrap:wrap}
+    .cat-btn{background:none;border:1px solid transparent;padding:8px 12px;border-radius:999px;cursor:pointer;font-weight:600;color:var(--accent)}
+    .cat-btn[aria-pressed="true"],.cat-btn:focus{background:var(--accent);color:#fff;border-color:rgba(0,0,0,0.06);outline:2px solid rgba(43,108,176,0.18)}
+
+    main{max-width:1100px;margin:0 auto;padding:0 20px 80px}
+
+    section{margin-top:20px}
+    section h2{margin:0 0 12px;font-size:18px}
+
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+
+    .card{background:var(--card);border-radius:10px;box-shadow:0 6px 18px rgba(15,23,42,0.06);overflow:hidden;display:flex;flex-direction:column;min-height:220px}
+    .cover{width:100%;aspect-ratio:3/4;object-fit:cover;background:#e6eefc}
+    .card-body{padding:12px;display:flex;flex-direction:column;gap:6px;flex:1}
+    .title{font-size:15px;font-weight:700;margin:0}
+    .author{font-size:13px;color:var(--muted);margin:0}
+    .rec{font-size:13px;color:#111;margin-top:auto}
+    .meta{font-size:12px;color:var(--muted);margin-top:8px}
+
+    .hidden{display:none !important}
+
+    @media (max-width:520px){
+      header{padding:18px 12px}
+      .site-title h1{font-size:16px}
+      .grid{gap:10px}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="site-title" role="banner">
+      <div class="logo" aria-hidden="true">BS</div>
+      <div>
+        <h1>VookShare</h1>
+        <p class="lead">Recommend great books, share short notes. Categories: Novels, Essays, Popular Science.</p>
+      </div>
+    </div>
+
+    <nav aria-label="Book categories" class="categories" id="categoryNav">
+      <button class="cat-btn" data-category="all" aria-pressed="true">All</button>
+      <button class="cat-btn" data-category="novels" aria-pressed="false">Novels</button>
+      <button class="cat-btn" data-category="essays" aria-pressed="false">Essays</button>
+      <button class="cat-btn" data-category="science" aria-pressed="false">Popular Science</button>
+    </nav>
+  </header>
+
+  <main>
+    <section aria-labelledby="popularTitle">
+      <h2 id="popularTitle">Popular Recommendations</h2>
+      <div class="grid" id="popularGrid">
+        <article class="card" data-category="novels" tabindex="0">
+          <img class="cover" src="https://picsum.photos/seed/book1/600/800" alt="Cover: The Quiet Storm" loading="lazy" width="600" height="800">
+          <div class="card-body">
+            <h3 class="title">The Quiet Storm</h3>
+            <p class="author">by A. Writer</p>
+            <p class="rec">A moving novel about small-town lives and subtle transformations — recommended for character-driven readers.</p>
+            <div class="meta">Category: Novels</div>
+          </div>
+        </article>
+
+        <article class="card" data-category="science" tabindex="0">
+          <img class="cover" src="https://picsum.photos/seed/book2/600/800" alt="Cover: Wonders of the Mind" loading="lazy" width="600" height="800">
+          <div class="card-body">
+            <h3 class="title">Wonders of the Mind</h3>
+            <p class="author">by Dr. E. Thinker</p>
+            <p class="rec">An accessible introduction to cognitive science with vivid examples and useful metaphors.</p>
+            <div class="meta">Category: Popular Science</div>
+          </div>
+        </article>
+
+        <article class="card" data-category="essays" tabindex="0">
+          <img class="cover" src="https://picsum.photos/seed/book3/600/800" alt="Cover: Notes on Everyday" loading="lazy" width="600" height="800">
+          <div class="card-body">
+            <h3 class="title">Notes on Everyday</h3>
+            <p class="author">by S. Essayist</p>
+            <p class="rec">A short collection of thoughtful essays on modern life and simple pleasures.</p>
+            <div class="meta">Category: Essays</div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section aria-labelledby="latestTitle">
+      <h2 id="latestTitle">Latest Reads</h2>
+      <div class="grid" id="latestGrid">
+        <article class="card" data-category="novels" tabindex="0">
+          <img class="cover" src="https://picsum.photos/seed/book4/600/800" alt="Cover: Driftwood" loading="lazy" width="600" height="800">
+          <div class="card-body">
+            <h3 class="title">Driftwood</h3>
+            <p class="author">by C. Novelist</p>
+            <p class="rec">Quietly profound — a short novel about choices and second chances.</p>
+            <div class="meta">Category: Novels</div>
+          </div>
+        </article>
+
+        <article class="card" data-category="science" tabindex="0">
+          <img class="cover" src="https://picsum.photos/seed/book5/600/800" alt="Cover: Energy & You" loading="lazy" width="600" height="800">
+          <div class="card-body">
+            <h3 class="title">Energy & You</h3>
+            <p class="author">by R. Scientist</p>
+            <p class="rec">A friendly guide to energy systems and everyday choices that shape our footprint.</p>
+            <div class="meta">Category: Popular Science</div>
+          </div>
+        </article>
+
+        <article class="card" data-category="essays" tabindex="0">
+          <img class="cover" src="https://picsum.photos/seed/book6/600/800" alt="Cover: Morning Pages" loading="lazy" width="600" height="800">
+          <div class="card-body">
+            <h3 class="title">Morning Pages</h3>
+            <p class="author">by L. Thinker</p>
+            <p class="rec">Short reflective essays suitable for morning reading and daily inspiration.</p>
+            <div class="meta">Category: Essays</div>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (function(){
+      const nav = document.getElementById('categoryNav');
+      const buttons = Array.from(nav.querySelectorAll('.cat-btn'));
+      const cards = Array.from(document.querySelectorAll('.card'));
+
+      function setActive(button){
+        buttons.forEach(b=>{
+          const pressed = b === button;
+          b.setAttribute('aria-pressed', String(pressed));
+        });
+      }
+
+      function filterBy(category){
+        if(category === 'all'){
+          cards.forEach(c => c.classList.remove('hidden'));
+        } else {
+          cards.forEach(c => {
+            c.classList.toggle('hidden', c.dataset.category !== category);
+          });
+        }
+      }
+
+      nav.addEventListener('click', e=>{
+        const btn = e.target.closest('.cat-btn');
+        if(!btn) return;
+        const cat = btn.dataset.category;
+        setActive(btn);
+        filterBy(cat);
+      });
+
+      // Keyboard: allow left/right to move focus between category buttons
+      nav.addEventListener('keydown', e=>{
+        const idx = buttons.indexOf(document.activeElement);
+        if(idx === -1) return;
+        if(e.key === 'ArrowRight') { buttons[(idx+1)%buttons.length].focus(); e.preventDefault(); }
+        if(e.key === 'ArrowLeft') { buttons[(idx-1+buttons.length)%buttons.length].focus(); e.preventDefault(); }
+        if(e.key === 'Enter' || e.key === ' ') { buttons[idx].click(); e.preventDefault(); }
+      });
+
+      // Optional: preserve selection on load (default is All)
+      // setActive(buttons[0]);
+      // filterBy('all');
+    })();
+  </script>
+</body>
+</html>

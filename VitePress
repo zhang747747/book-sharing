@@ -1,0 +1,28 @@
+export default {
+  title: 'BookShare',
+  description: 'Recommend good books · Reading notes · Categorized',
+  base: '/',
+  head: [
+    // 引入自定义样式（在 public 下）
+    ['link', { rel: 'stylesheet', href: '/styles.css' }]
+  ],
+  themeConfig: {
+    nav: [
+      { text: 'Home', link: '/' },
+      { text: 'Notes', link: '/notes/' }
+    ],
+    sidebar: [
+      {
+        text: 'Categories',
+        items: [
+          { text: 'All', link: '/' },
+          { text: 'Novels', link: '/categories/novels' },
+          { text: 'Essays', link: '/categories/essays' },
+          { text: 'Popular Science', link: '/categories/science' },
+          { text: 'Fantasy', link: '/categories/fantasy' },
+          { text: 'Reading Notes', link: '/notes/' }
+        ]
+      }
+    ]
+  }
+}

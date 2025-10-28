@@ -1,0 +1,12 @@
+[
+  {"id":1,"title":"Harry Potter and the Philosopher's Stone","author":"J. K. Rowling","category":"fantasy","cover":"images/hp1.jpg","rec":"The beginning of Harry's journey.","popular":true,"note":"notes/hp1.html"},
+  {"id":2,"title":"Harry Potter and the Chamber of Secrets","author":"J. K. Rowling","category":"fantasy","cover":"images/hp2.jpg","rec":"Mysteries at Hogwarts.","popular":true,"note":"notes/hp2.html"},
+  {"id":3,"title":"Harry Potter and the Prisoner of Azkaban","author":"J. K. Rowling","category":"fantasy","cover":"images/hp3.jpg","rec":"Dark secrets and time travel.","popular":true,"note":"notes/hp3.html"},
+  {"id":4,"title":"Harry Potter and the Goblet of Fire","author":"J. K. Rowling","category":"fantasy","cover":"images/hp4.jpg","rec":"The Triwizard Tournament.","popular":true},
+  {"id":5,"title":"Harry Potter and the Order of the Phoenix","author":"J. K. Rowling","category":"fantasy","cover":"images/hp5.jpg","rec":"Resistance at Hogwarts.","popular":true},
+  {"id":6,"title":"Harry Potter and the Half-Blood Prince","author":"J. K. Rowling","category":"fantasy","cover":"images/hp6.jpg","rec":"Secrets of the past.","popular":true},
+  {"id":7,"title":"Harry Potter and the Deathly Hallows","author":"J. K. Rowling","category":"fantasy","cover":"images/hp7.jpg","rec":"Final confrontation with Voldemort.","popular":true},
+  {"id":8,"title":"Sapiens: A Brief History of Humankind","author":"Yuval Noah Harari","category":"science","cover":"https://picsum.photos/seed/sapiens/400/600","rec":"Big-picture history of humankind.","popular":true,"note":"notes/sapiens.html"},
+  {"id":9,"title":"On Writing: A Memoir of the Craft","author":"Stephen King","category":"essays","cover":"https://picsum.photos/seed/writing/400/600","rec":"Writing craft and life lessons.","popular":false,"note":"notes/on-writing.html"},
+  {"id":10,"title":"1984","author":"George Orwell","category":"novels","cover":"https://picsum.photos/seed/1984/400/600","rec":"A dystopian classic.","popular":true}
+]

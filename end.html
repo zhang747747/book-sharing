@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BookShare — Recommendations & Notes</title>
+  <style>
+    :root{--bg:#f7f7fb;--card:#fff;--accent:#2b6cb0;--muted:#6b7280}
+    *{box-sizing:border-box}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,Helvetica,Arial;background:var(--bg);color:#111}
+    header{padding:20px 20px;max-width:1100px;margin:0 auto}
+    .site-title{display:flex;align-items:center;gap:12px}
+    .logo{width:44px;height:44px;border-radius:8px;background:linear-gradient(135deg,var(--accent),#6ea8ff);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700}
+    h1{font-size:18px;margin:0}
+    p.lead{margin:6px 0 0;color:var(--muted);font-size:13px}
+
+    /* Category nav */
+    .categories{display:flex;gap:8px;padding:12px 0;flex-wrap:wrap}
+    .cat-btn{background:none;border:1px solid transparent;padding:8px 12px;border-radius:999px;cursor:pointer;font-weight:600;color:var(--accent)}
+    .cat-btn[aria-pressed="true"],.cat-btn:focus{background:var(--accent);color:#fff;border-color:rgba(0,0,0,0.06);outline:2px solid rgba(43,108,176,0.18)}
+
+    /* Category title list */
+    .category-list{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+    .category-list button{background:#fff;border:1px solid rgba(15,23,42,0.06);padding:6px 10px;border-radius:8px;cursor:pointer;font-size:13px}
+    .category-list button:focus{outline:2px solid rgba(43,108,176,0.18)}
+
+    main{max-width:1100px;margin:0 auto;padding:0 20px 80px}
+
+    section{margin-top:20px}
+    section h2{margin:0 0 12px;font-size:18px}
+
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+
+    .card{background:var(--card);border-radius:10px;box-shadow:0 6px 18px rgba(15,23,42,0.06);overflow:hidden;display:flex;flex-direction:column;min-height:220px;transition:transform .2s,box-shadow .2s}
+    /* 更靠近实际书本的封面比例并限制高度 */
+    .cover{width:100%;aspect-ratio:2/3;max-height:320px;object-fit:cover;background:#e6eefc;display:block;border-bottom:1px solid rgba(0,0,0,0.04)}
+    .card-body{padding:12px;display:flex;flex-direction:column;gap:6px;flex:1}
+    .title{font-size:15px;font-weight:700;margin:0}
+    .author{font-size:13px;color:var(--muted);margin:0}
+    .rec{font-size:13px;color:#111;margin-top:auto}
+    .meta{font-size:12px;color:var(--muted);margin-top:8px}
+
+    .hidden{display:none !important}
+
+    .notice{font-size:13px;color:var(--muted);margin-top:6px}
+
+    .card.highlight{box-shadow:0 12px 34px rgba(43,108,176,0.18);transform:scale(1.02);z-index:3}
+
+    @media (max-width:520px){
+      header{padding:14px 12px}
+      .site-title h1{font-size:16px}
+      .grid{gap:10px}
+      .cover{max-height:260px}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="site-title" role="banner">
+      <div class="logo" aria-hidden="true">BS</div>
+      <div>
+        <h1>BookShare</h1>
+        <p class="lead">Recommend great books, share short notes. Categories: Novels, Essays, Popular Science.</p>
+      </div>
+    </div>
+
+    <nav aria-label="Book categories" class="categories" id="categoryNav">
+      <button class="cat-btn" data-category="all" aria-pressed="true">All</button>
+      <button class="cat-btn" data-category="novels" aria-pressed="false">Novels</button>
+      <button class="cat-btn" data-category="essays" aria-pressed="false">Essays</button>
+      <button class="cat-btn" data-category="science" aria-pressed="false">Popular Science</button>
+    </nav>
+
+    <!-- Category book list (titles) -->
+    <div id="categoryList" class="category-list" aria-live="polite"></div>
+  </header>
+
+  <main>
+    <section aria-labelledby="popularTitle">
+      <h2 id="popularTitle">Popular Recommendations</h2>
+      <div class="grid" id="popularGrid"></div>
+      <div class="notice" id="popularNotice"></div>
+    </section>
+
+    <section aria-labelledby="latestTitle">
+      <h2 id="latestTitle">Latest Reads</h2>
+      <div class="grid" id="latestGrid"></div>
+      <div class="notice" id="latestNotice"></div>
+    </section>
+  </main>
+
+  <script>
+    (function(){
+      const nav = document.getElementById('categoryNav');
+      const buttons = Array.from(nav.querySelectorAll('.cat-btn'));
+      const categoryList = document.getElementById('categoryList');
+      const popularGrid = document.getElementById('popularGrid');
+      const latestGrid = document.getElementById('latestGrid');
+      const popularNotice = document.getElementById('popularNotice');
+      const latestNotice = document.getElementById('latestNotice');
+      let books = [];
+
+      function capitalize(s){ return String(s).charAt(0).toUpperCase() + String(s).slice(1); }
+      function escapeHtml(s){ return String(s).replace(/[&<>"']/g, m=> ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]); }
+
+      function createCard(book){
+        const article = document.createElement('article');
+        article.className = 'card';
+        article.dataset.id = book.id;
+        article.setAttribute('data-category', book.category);
+        article.tabIndex = 0;
+
+        // 优先使用本地封面路径，如果不存在请确保 books.json 中 cover 字段指向正确 URL 或 covers/ 下的文件
+        const coverUrl = escapeHtml(book.cover || '');
+        article.innerHTML = `
+          <img class="cover" src="${coverUrl}" alt="Cover: ${escapeHtml(book.title)}" loading="lazy" width="600" height="900">
+          <div class="card-body">
+            <h3 class="title">${escapeHtml(book.title)}</h3>
+            <p class="author">by ${escapeHtml(book.author)}</p>
+            <p class="rec">${escapeHtml(book.rec)}</p>
+            <div class="meta">Category: ${capitalize(escapeHtml(book.category))}</div>
+          </div>
+        `;
+        // 如果图片加载失败（404），显示占位并避免空白高度
+        const img = article.querySelector('img.cover');
+        img.addEventListener('error', ()=> {
+          img.src = 'https://via.placeholder.com/400x600?text=No+Cover';
+        });
+        return article;
+      }
+
+      // render list of titles for a category
+      function renderCategoryList(category){
+        categoryList.innerHTML = '';
+        if(!category || category === 'all') return;
+        const list = books.filter(b=>b.category === category);
+        if(list.length === 0) return;
+        list.forEach(b=>{
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.textContent = b.title;
+          btn.dataset.id = b.id;
+          btn.addEventListener('click', ()=> {
+            const catBtn = buttons.find(x=>x.dataset.category === category);
+            if(catBtn) setActive(catBtn);
+            filterBy(category);
+            scrollToBook(b.id);
+          });
+          categoryList.appendChild(btn);
+        });
+      }
+
+      function scrollToBook(id){
+        const el = document.querySelector('.card[data-id="'+id+'"]');
+        if(!el) return;
+        el.scrollIntoView({behavior:'smooth', block:'center'});
+        el.classList.add('highlight');
+        setTimeout(()=> el.classList.remove('highlight'), 1600);
+      }
+
+      function renderAll(){
+        popularGrid.innerHTML = '';
+        latestGrid.innerHTML = '';
+        const popular = books.filter(b=>b.popular).slice(0,8);
+        if(popular.length === 0){
+          popularNotice.textContent = 'No popular recommendations yet.';
+        } else {
+          popularNotice.textContent = '';
+          popular.forEach(b=> popularGrid.appendChild(createCard(b)));
+        }
+
+        const latest = books.slice().sort((a,b)=>b.id-a.id).slice(0,12);
+        if(latest.length === 0){
+          latestNotice.textContent = 'No books available.';
+        } else {
+          latestNotice.textContent = '';
+          latest.forEach(b=> latestGrid.appendChild(createCard(b)));
+        }
+
+        const active = buttons.find(b=>b.getAttribute('aria-pressed') === 'true');
+        if(active) renderCategoryList(active.dataset.category);
+      }
+
+      function setActive(button){
+        buttons.forEach(b=> b.setAttribute('aria-pressed', String(b===button)));
+      }
+
+      function filterBy(category){
+        const cards = Array.from(document.querySelectorAll('.card'));
+        if(category === 'all'){
+          cards.forEach(c => c.classList.remove('hidden'));
+        } else {
+          cards.forEach(c => c.classList.toggle('hidden', c.dataset.category !== category));
+        }
+      }
+
+      // load data
+      fetch('./books.json', {cache: "no-store"})
+        .then(res=>{
+          if(!res.ok) throw new Error('Failed to load books.json (' + res.status + ')');
+          return res.json();
+        })
+        .then(data=>{
+          books = Array.isArray(data) ? data : [];
+          renderAll();
+        })
+        .catch(err=>{
+          console.error(err);
+          books = [
+            {id:1,title:"The Quiet Storm",author:"A. Writer",category:"novels",cover:"https://picsum.photos/seed/book1/400/600",rec:"A moving novel.",popular:true}
+          ];
+          renderAll();
+        });
+
+      // category click
+      nav.addEventListener('click', e=>{
+        const btn = e.target.closest('.cat-btn');
+        if(!btn) return;
+        const cat = btn.dataset.category;
+        setActive(btn);
+        filterBy(cat);
+        renderCategoryList(cat);
+      });
+
+      // keyboard navigation
+      nav.addEventListener('keydown', e=>{
+        const idx = buttons.indexOf(document.activeElement);
+        if(idx === -1) return;
+        if(e.key === 'ArrowRight'){ buttons[(idx+1)%buttons.length].focus(); e.preventDefault(); }
+        if(e.key === 'ArrowLeft'){ buttons[(idx-1+buttons.length)%buttons.length].focus(); e.preventDefault(); }
+        if(e.key === 'Enter' || e.key === ' '){ buttons[idx].click(); e.preventDefault(); }
+      });
+
+    })();
+  </script>
+</body>
+</html>
