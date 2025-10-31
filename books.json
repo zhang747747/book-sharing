@@ -6,7 +6,11 @@
   {"id":5,"title":"Harry Potter and the Order of the Phoenix","author":"J. K. Rowling","category":"fantasy","cover":"images/hp5.jpg","rec":"Resistance at Hogwarts.","popular":true},
   {"id":6,"title":"Harry Potter and the Half-Blood Prince","author":"J. K. Rowling","category":"fantasy","cover":"images/hp6.jpg","rec":"Secrets of the past.","popular":true},
   {"id":7,"title":"Harry Potter and the Deathly Hallows","author":"J. K. Rowling","category":"fantasy","cover":"images/hp7.jpg","rec":"Final confrontation with Voldemort.","popular":true},
-  {"id":8,"title":"Sapiens: A Brief History of Humankind","author":"Yuval Noah Harari","category":"science","cover":"https://picsum.photos/seed/sapiens/400/600","rec":"Big-picture history of humankind.","popular":true,"note":"notes/sapiens.html"},
-  {"id":9,"title":"On Writing: A Memoir of the Craft","author":"Stephen King","category":"essays","cover":"https://picsum.photos/seed/writing/400/600","rec":"Writing craft and life lessons.","popular":false,"note":"notes/on-writing.html"},
-  {"id":10,"title":"1984","author":"George Orwell","category":"novels","cover":"https://picsum.photos/seed/1984/400/600","rec":"A dystopian classic.","popular":true}
+  {"id":8,"title":"The Songs of Trees","author":"David George Haskell","category":"science","cover":"images/the songs of trees.jpg","rec":"Exploring the connections between trees and human life.","popular":true},
+  {"id":9,"title":"Mirror Maze","author":"Gavin Extence","category":"essays","cover":"images/Mirror Maze.jpg","rec":"A fascinating exploration of identity and perception.","popular":true},
+  {"id":10,"title":"Charlotte's Web","author":"E.B. White","category":"novels","cover":"images/charalotte's web.jpg","rec":"A heartwarming story of friendship between a pig and a spider.","popular":true},
+  {"id":11,"title":"The Little Prince","author":"Antoine de Saint-Exupéry","category":"novels","cover":"images/little prince.jpg","rec":"A heartwarming tale about life and friendship.","popular":true},
+  {"id":12,"title":"Charlie and the Chocolate Factory","author":"Roald Dahl","category":"novels","cover":"images/chocolate.jpg","rec":"A magical adventure in a chocolate factory.","popular":true},
+  {"id":13,"title":"Magic & Mystery of Space","author":"Various Authors","category":"science","cover":"images/mogic&mstrey of space.jpg","rec":"An exciting exploration of the universe and its wonders.","popular":true},
+  {"id":14,"title":"Stray Birds","author":"Rabindranath Tagore","category":"essays","cover":"images/essay.jpg","rec":"A collection of philosophical poetry and reflections.","popular":true}
 ]
